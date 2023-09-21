@@ -15,9 +15,10 @@ export default function Error({
   }, [error])
  
   return (
+    <main className='flex min-h-screen flex-col items-center justify-center p-24'>
     <div>
       <h2>Something went wrong!</h2>
-      <button
+      <button className=' text-cyan-600'
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
@@ -26,5 +27,6 @@ export default function Error({
         Try again
       </button>
     </div>
+    </main>
   )
 }
