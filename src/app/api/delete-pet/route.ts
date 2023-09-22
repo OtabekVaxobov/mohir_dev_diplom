@@ -1,22 +1,21 @@
 import { sql } from '@vercel/postgres';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextApiRequest) {
   const method = req.method;
-  const { id } = JSON.parse(req.body);
   const { searchParams } = new URL(req.url!);
   const petName = searchParams.get('petName');
   const ownerName = searchParams.get('ownerName');
-  
-  console.error('handler', id, method, req.body);
+  const pets = await sql`SELECT * FROM Pets;`;
+  const deff = 'null'
+  console.error('handler', petName, method, req.body);
   try {
-   
-    const { rows } = await sql`DELETE FROM Pets WHERE ID = ${id};`
-        
-    res.status(200).json(rows);
-
+    if (!petName)  return NextResponse.json({ pets }, { status: 200 });
+     await sql`DELETE FROM Pets WHERE Name = ${petName};`
   } catch(error) {
     console.error(error);
   }
-  
+  const after_pets = await sql`SELECT * FROM Pets;`;
+  return NextResponse.json({ after_pets }, { status: 200 });
 }
