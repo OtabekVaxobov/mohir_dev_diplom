@@ -14,18 +14,21 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="uz">
       <body className={inter.className}>
+      
       <Toaster />
         <Suspense fallback="Loading...">
           <AuthStatus />
         </Suspense>
-        {children}</body>
+        {children}
+       
+        </body>
     </html>
   )
 }
