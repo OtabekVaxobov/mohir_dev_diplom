@@ -9,15 +9,19 @@ export default async function middleware(req: NextRequest) {
   if (path === "/") {
     return NextResponse.next();
   }
-
-  const session = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+    
+      const session = getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+  // const session = getToken({
+  //   req,
+  //   secret: process.env.NEXTAUTH_SECRET,
+  // });
 
   if (!session && path === "/protected") {
     return NextResponse.redirect(new URL("/login", req.url));
-  } else if (session && (path === "/login" || path === "/register")) {
+  } else if (await session && (path === "/login" || path === "/register")) {
     return NextResponse.redirect(new URL("/protected", req.url));
   }
   return NextResponse.next();
