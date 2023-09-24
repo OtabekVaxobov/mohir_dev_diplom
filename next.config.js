@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   swcMinify: true,
-  distDir: 'public',
+  distDir: 'build',
 };
 
 module.exports = nextConfig;
