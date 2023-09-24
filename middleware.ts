@@ -1,16 +1,22 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+
+export const config = {
+  runtime: "experimental-edge",
+};
+
+
 export default async function middleware(req: NextRequest) {
   // Get the pathname of the request (e.g. /, /protected)
-  const url = req.url;
+  const path = req.nextUrl.pathname;
 
   // If it's the root path, just render it
-  if (url === "/") {
+  if (path === "/") {
     return NextResponse.next();
   }
     
-      const session = getToken({
+      const session = await getToken({
       req,
       secret: process.env.NEXTAUTH_SECRET,
     });
@@ -19,10 +25,11 @@ export default async function middleware(req: NextRequest) {
   //   secret: process.env.NEXTAUTH_SECRET,
   // });
 
-  if (!session && url === "/protected") {
+  if (!session && path === "/protected") {
     return NextResponse.redirect(new URL("/login", req.url));
-  } else if (await session && (url === "/login" || url === "/register")) {
+  } else if ( session && (path === "/login" || path === "/register")) {
     return NextResponse.redirect(new URL("/protected", req.url));
   }
   return NextResponse.next();
 }
+
